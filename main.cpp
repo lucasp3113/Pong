@@ -134,7 +134,7 @@ int main() {
         UpdateMusicStream(music);
 
         //textos
-        const char* counter = TextFormat("%d : %d", points1, points2);
+        const char* counter = TextFormat("%d      %d", points1, points2);
         const char* paused = TextFormat("%d", (int)pause);
         const char* uno_vs_cpu = TextFormat("1  Jugador  ");
         const char* uno_vs_uno = TextFormat("2 Jugadores");
@@ -143,7 +143,7 @@ int main() {
             if(IsKeyDown(KEY_UP)) gamemode = 1;
             if(IsKeyDown(KEY_DOWN)) gamemode = 2;
             if(IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN)) PlaySound(selectSound);
-            if(IsKeyDown(KEY_ENTER)) menu = false;
+            if(IsKeyPressed(KEY_ENTER)) menu = false;
             if(CheckCollisionPointRec(GetMousePosition(), {(float)GetScreenWidth() / 2 - MeasureText(uno_vs_cpu, 30) / 2, (float)GetScreenHeight() / 2 - 30, (float)MeasureText(uno_vs_cpu, 30), 30}) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 gamemode = 1;
                 PlaySound(selectSound);
@@ -389,7 +389,27 @@ int main() {
                     } else {
                         DrawTextureEx(redWin, {(float)GetScreenWidth() / 2 - redWin.width * 0.8f / 2, (float)GetScreenHeight() / 3 - redWin.height * 0.8f / 2}, 0.0, 0.8, WHITE);
                     }
+                    DrawText("Presiona énter para volver al menú", GetScreenWidth() / 2 - MeasureText("Presiona Enter para volver al menú", 30) / 2, GetScreenHeight() - 180, 30, (int)time % 2 == 0 ? WHITE : GRAY);
+                    if(IsKeyPressed(KEY_ENTER)) {
+                        menu = true;
+                        points1 = 0;
+                        points2 = 0;
+                        winPlayed = false;
+                        pause = 4;
+                        speed = 700;
+                        ball.x = GetScreenWidth() / 2;
+                        ball.y = GetScreenHeight() / 2;
+                        directionBall = {
+                            GetRandomValue(0, 1) != 0 ? (float)1 : (float)-1,
+                            GetRandomValue(0, 1) != 0 ? (float)1 : (float)-1
+                        };
+                    }
                 } else {
+                    //linea punteada
+                    for(int i = 0; i < GetScreenHeight(); i += 30) {
+                        DrawRectangle(GetScreenWidth() / 2 - 2, i, 4, 15, WHITE);
+                    }
+
                     //escudos
                     if(show_shield1 > 0) DrawRectangleRec(shield1, GREEN);
                     if(show_shield2 > 0) DrawRectangleRec(shield2, GREEN);
